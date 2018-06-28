@@ -27,6 +27,10 @@ class FeedbinAPI
     HTTParty.get("https://api.feedbin.me/v2/unread_entries.json", basic_auth: basic_auth)
   end
 
+  def starred_entries
+    HTTParty.get("https://api.feedbin.me/v2/starred_entries.json", basic_auth: basic_auth)
+  end
+
   def star(id)
     HTTParty.post("https://api.feedbin.me/v2/starred_entries.json",
       body: { 'starred_entries' => id }.to_json,
@@ -39,6 +43,14 @@ class FeedbinAPI
       body: { 'starred_entries' => id }.to_json,
       headers: { 'Content-Type' => 'application/json' },
       basic_auth: basic_auth).code
+  end
+
+  def unstar_with_id(id)
+    resp = HTTParty.post("https://api.feedbin.me/v2/starred_entries/delete.json",
+      body: { 'starred_entries' => id }.to_json,
+      headers: { 'Content-Type' => 'application/json' },
+      basic_auth: basic_auth)
+    resp.body
   end
 
   def mark_as_read(id)
